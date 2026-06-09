@@ -116,6 +116,11 @@
 
                     if (category.name === "Companion") {
                         for (const fauxCompanion of currentAgents) {
+                            if (!catLabels.includes(fauxCompanion.name)) {
+                                console.log(`[FL Assorted Cats] Ignoring ${fauxCompanion.name} as it is not flagged`)
+                                continue;
+                            }
+
                             console.debug(`[FL Assorted Cats] Injected agent ${fauxCompanion.name} as 'companion'`);
                             category.possessions.push(fauxCompanion);
                         }
