@@ -188,7 +188,8 @@
             id: agentData['id'],
             name: agentData['name'],
             nameAndLevel: "1 x " + agentData['name'],
-            description: agentData['description'],
+            // Add a little trailer to prevent confusion about what the heck is this.
+            description: agentData['description'] + '<br><p><i>This is an agent.</i></p>',
             image: agentData['image'],
             qualityPossessedId: -agentData["id"],
             category: "Companion",
