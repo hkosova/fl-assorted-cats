@@ -383,6 +383,18 @@
                                     child.classList.add(VISUALLY_HIDDEN_STYLE)
                                 }
                             }
+
+                            // Since agents cannot be "equipped" in the traditional sense, we explicitly mark them
+                            // as such and prevent UI code from processing any clicks on them.
+                            agentDivs = itemList.querySelectorAll(currentAgents.map(agent => `div[data-quality-id="${agent.id}"]`).join(', '));
+                            agentDivs.forEach((el) => {
+                                el.firstChild.style.cursor = 'not-allowed';
+                                el.firstChild.onclick = (ev) => {
+                                    ev.stopPropagation();
+                                    ev.preventDefault();
+                                }
+                            });
+
                             itemContentsObserver.observe(itemList, { childList: true, subtree: true });
                             return;
                         }
