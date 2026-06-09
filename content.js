@@ -38,6 +38,7 @@
         'Lyon Pursuivant of Arms Extraordinary',
         'Inquisitive Lamp-cat',
         'Feline Pariah',
+        'The Ragged Recusant',
     ];
     const DEFAULT_SLOT_NAME = 'Cats, Assorted';
     const INTERESTING_CATEGORIES = [
@@ -61,7 +62,7 @@
         'Crew',
         'Luggage',
     ];
-
+    let currentAgents = [];
 
     function modifyResponse (response) {
         /*
@@ -79,16 +80,27 @@
          */
 
         if (this.readyState === DONE) {
+            console.debug(`[FL Assorted Cats] Intercepted ${response.currentTarget.responseURL}`);
+            if (/\/api\/agents\/?$/.test(response.currentTarget.responseURL)) {
+                const data = JSON.parse(response.target.responseText);
+
+                currentAgents = data.agents.map((item) => convertAgentToCompanion(item));
+
+                console.debug("[FL Assorted Cats] Intercepted list of agents:", currentAgents);
+
+                console.debug("[FL Assorted Cats] Saving list of agents for future use...");
+                window.dispatchEvent(new CustomEvent("FL_AC_saveAgents", {detail: {agents: currentAgents}}));
+            }
             if (/\/api\/character\/myself\/?$/.test(response.currentTarget.responseURL)) {
                 const data = JSON.parse(response.target.responseText);
 
                 /*
                  Here is the tricky part: this response does not contain any indication that if
                  specific item is equipped or not, and if you mark equipped item as belonging
-                 to the test slot then it would not possible to un-equip it.
+                 to the test slot then it would not be possible to un-equip it.
 
                  To prevent that, we use a heuristic that tries to get the list of the currently
-                 equipped items so we can skip patching them.
+                 equipped items, so we can skip patching them.
                  */
 
                 const equippedItemSlots = document.getElementsByClassName('equipped-item');
@@ -101,6 +113,13 @@
                 for (const category of data.possessions) {
                     // Only some of the categories can contain cats, so we'll just skip others to save time.
                     if (!INTERESTING_CATEGORIES.includes(category.name)) continue;
+
+                    if (category.name === "Companion") {
+                        for (const fauxCompanion of currentAgents) {
+                            console.debug(`[FL Assorted Cats] Injected agent ${fauxCompanion.name} as 'companion'`);
+                            category.possessions.push(fauxCompanion);
+                        }
+                    }
 
                     for (const candidate of category.possessions) {
                         if (candidate.id in equippedItems) continue;
@@ -145,6 +164,26 @@
     let fauxItemGroup = createFauxItemGroup();
     let trueItemImage = null;
     let trueItemQualityId = null;
+
+    function convertAgentToCompanion(agentData) {
+        return {
+            id: agentData['id'],
+            name: agentData['name'],
+            nameAndLevel: "1 x " + agentData['name'],
+            description: agentData['description'],
+            image: agentData['image'],
+            qualityPossessedId: -agentData["id"],
+            category: "Companion",
+            nature: "Thing",
+            equippable: false,
+            level: 1,
+            himbleLevel: 1,
+            progressAsPercentage: -1,
+            allowedOn: "Character",
+            isOutfit: false,
+            enhancements: []
+        }
+    }
 
     // Automatically generated item group based on the HTML code of item group list element.
     function createFauxItemGroup() {
@@ -348,16 +387,23 @@
         }
     });
 
-    console.debug("[FL Assorted Cats] Registering listener for FL_AC_settings message...");
+    console.debug("[FL Assorted Cats] Registering listener for FL_AC_* messages...");
     window.addEventListener("message", (event) => {
         if (event.data.action === "FL_AC_settings") {
             console.debug("[FL Assorted Cats] Received settings event: ", event.data);
             slotName = event.data.settings.slotName;
             catLabels = event.data.settings.items;
         }
+        if (event.data.action === "FL_AC_agents") {
+            console.debug("[FL Assorted Cats] Saved agents:", event.data);
+            currentAgents = event.data.agents;
+        }
     });
     console.debug("[FL Assorted Cats] Sending request to retrieve settings...")
     window.dispatchEvent(new CustomEvent('FL_AC_injected'));
+
+    console.debug("[FL Assorted Cats] Sending request to retrieve agents list...")
+    window.dispatchEvent(new CustomEvent('FL_AC_loadAgents'));
 
     testSlotObserver.observe(document, { childList: true, subtree: true });
 }())

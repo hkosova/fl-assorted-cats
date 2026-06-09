@@ -34,6 +34,7 @@ const SLOT_CONTENTS_PRESETS = new Map([
         'Lyon Pursuivant of Arms Extraordinary',
         'Inquisitive Lamp-cat',
         'Feline Pariah',
+        'The Ragged Recusant'
     ]],
     ['Very Good Boys', [
         'Slavering Dream-Hound',
