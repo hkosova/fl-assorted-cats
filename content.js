@@ -171,6 +171,19 @@
     let trueItemQualityId = null;
 
     function convertAgentToCompanion(agentData) {
+        convertedLevels = agentData['levels']
+            .filter((level) => level["level"] > 0)
+            .map((level) => {
+                return {
+                    "qualityName": level['name'],
+                    "qualityId": level['id'],
+                    "level": level['level'],
+                    "category": level['category'],
+                    // I don't know how to handle it here, so let's just default
+                    // to something sane-ish.
+                    "affectsPyramid": false
+                };
+            })
         return {
             id: agentData['id'],
             name: agentData['name'],
@@ -186,7 +199,7 @@
             progressAsPercentage: -1,
             allowedOn: "Character",
             isOutfit: false,
-            enhancements: []
+            enhancements: convertedLevels
         }
     }
 
