@@ -86,10 +86,10 @@
 
                 currentAgents = data.agents.map((item) => convertAgentToCompanion(item));
 
-                console.debug("[FL Assorted Cats] Intercepted list of agents:", currentAgents);
+                console.debug('[FL Assorted Cats] Intercepted list of agents:', currentAgents);
 
-                console.debug("[FL Assorted Cats] Saving list of agents for future use...");
-                window.dispatchEvent(new CustomEvent("FL_AC_saveAgents", {detail: {agents: currentAgents}}));
+                console.debug('[FL Assorted Cats] Saving list of agents for future use...');
+                window.dispatchEvent(new CustomEvent('FL_AC_saveAgents', { detail: { agents: currentAgents } }));
             }
             if (/\/api\/character\/myself\/?$/.test(response.currentTarget.responseURL)) {
                 const data = JSON.parse(response.target.responseText);
@@ -114,7 +114,7 @@
                     // Only some of the categories can contain cats, so we'll just skip others to save time.
                     if (!INTERESTING_CATEGORIES.includes(category.name)) continue;
 
-                    if (category.name === "Companion") {
+                    if (category.name === 'Companion') {
                         for (const fauxCompanion of currentAgents) {
                             if (!catLabels.includes(fauxCompanion.name)) {
                                 console.log(`[FL Assorted Cats] Ignoring ${fauxCompanion.name} as it is not flagged`)
@@ -155,57 +155,57 @@
 
      Solution taken from https://stackoverflow.com/a/41566077
      */
-    function openBypass (original_function) {
+    function openBypass (originalFunction) {
         return function (method, url, async) {
             this.addEventListener('readystatechange', modifyResponse);
-            return original_function.apply(this, arguments);
+            return originalFunction.apply(this, arguments);
         };
     }
     XMLHttpRequest.prototype.open = openBypass(XMLHttpRequest.prototype.open);
-    console.debug("[FL Assorted Cats] Installed injected bypass.");
+    console.debug('[FL Assorted Cats] Installed injected bypass.');
 
     let slotName = DEFAULT_SLOT_NAME;
     let catLabels = DEFAULT_CAT_LABELS;
-    let fauxItemGroup = createFauxItemGroup();
+    const fauxItemGroup = createFauxItemGroup();
     let trueItemImage = null;
     let trueItemQualityId = null;
 
-    function convertAgentToCompanion(agentData) {
-        convertedLevels = agentData['levels']
-            .filter((level) => level["level"] > 0)
+    function convertAgentToCompanion (agentData) {
+        const convertedLevels = agentData.levels
+            .filter((level) => level.level > 0)
             .map((level) => {
                 return {
-                    "qualityName": level['name'],
-                    "qualityId": level['id'],
-                    "level": level['level'],
-                    "category": level['category'],
+                    qualityName: level.name,
+                    qualityId: level.id,
+                    level: level.level,
+                    category: level.category,
                     // I don't know how to handle it here, so let's just default
                     // to something sane-ish.
-                    "affectsPyramid": false
+                    affectsPyramid: false,
                 };
             })
         return {
-            id: agentData['id'],
-            name: agentData['name'],
-            nameAndLevel: "1 x " + agentData['name'],
+            id: agentData.id,
+            name: agentData.name,
+            nameAndLevel: '1 x ' + agentData.name,
             // Add a little trailer to prevent confusion about what the heck is this.
-            description: agentData['description'] + '<br><p><i>This is an agent.</i></p>',
-            image: agentData['image'],
-            qualityPossessedId: -agentData["id"],
-            category: "Companion",
-            nature: "Thing",
+            description: agentData.description + '<br><p><i>This is an agent.</i></p>',
+            image: agentData.image,
+            qualityPossessedId: -agentData.id,
+            category: 'Companion',
+            nature: 'Thing',
             equippable: false,
             level: 1,
             himbleLevel: 1,
             progressAsPercentage: -1,
-            allowedOn: "Character",
+            allowedOn: 'Character',
             isOutfit: false,
-            enhancements: convertedLevels
+            enhancements: convertedLevels,
         }
     }
 
     // Automatically generated item group based on the HTML code of item group list element.
-    function createFauxItemGroup() {
+    function createFauxItemGroup () {
         const li = document.createElement('li');
         li.classList.add('equipment-group-list__item', VISUALLY_HIDDEN_STYLE);
         li.setAttribute('data-faux-group', 'true');
@@ -229,7 +229,7 @@
 
         const container4 = document.createElement('div');
         container4.classList.add('equipped-item');
-        container4.setAttribute("data-quality-id", "0");
+        container4.setAttribute('data-quality-id', '0');
 
         const container5 = document.createElement('div');
         container5.setAttribute('data-item-placeholder', 'true')
@@ -274,11 +274,11 @@
                 if (fauxEquippedItem) {
                     // FIXME: quality ID transfer is not working at the moment and I cannot be bothered to fix it.
                     // After all, how often would you change your destiny?
-                    fauxEquippedItem.setAttribute("data-quality-id", trueItemQualityId);
+                    fauxEquippedItem.setAttribute('data-quality-id', trueItemQualityId);
                 }
 
                 // Ensure that the old image is removed
-                const swapContainer = fauxItemGroup.querySelector("div[data-item-placeholder]");
+                const swapContainer = fauxItemGroup.querySelector('div[data-item-placeholder]');
                 while (swapContainer.lastElementChild) {
                     swapContainer.removeChild(swapContainer.lastElementChild);
                 }
@@ -300,7 +300,6 @@
         mutations.forEach(function (mutation) {
             if (mutation.type === 'childList' &&
                 mutation.target.nodeName.toLowerCase() === 'li') {
-
                 if (mutation.removedNodes.length > 0) {
                     mutation.target.classList.add(VISUALLY_HIDDEN_STYLE)
                 } else if (mutation.addedNodes.length > 0) {
@@ -331,7 +330,7 @@
                         }
 
                         // Skip groups created by us
-                        if (group.hasAttribute("data-faux-group")) {
+                        if (group.hasAttribute('data-faux-group')) {
                             continue;
                         }
 
@@ -355,13 +354,13 @@
 
                             const equippedContainer = group.getElementsByClassName('equipment-group__equipment-slot-container')[0];
                             if (equippedContainer) {
-                                equippedContainer.className = "";
+                                equippedContainer.className = '';
 
                                 // Set up observer so that any new image elements are moved to the faux item group
                                 slotImageObserver.observe(equippedContainer, { childList: true, subtree: true });
 
                                 // Remove the currently equipped item image from the original group
-                                trueItemImage = equippedContainer.querySelector("img");
+                                trueItemImage = equippedContainer.querySelector('img');
                                 trueItemImage.parentElement.removeChild(trueItemImage);
 
                                 const currentlyEquippedItem = equippedContainer.querySelector("div[class*='equipped-item']");
@@ -373,18 +372,18 @@
                                 }
 
                                 // Remove any remaining decorations from the hidden item slot
-                                equippedContainer.classList.remove("equipment-group__equipment-slot-container--full");
-                                equippedContainer.classList.remove("equipment-group__equipment-slot-container--empty");
+                                equippedContainer.classList.remove('equipment-group__equipment-slot-container--full');
+                                equippedContainer.classList.remove('equipment-group__equipment-slot-container--empty');
 
                                 // Show the faux item group
                                 fauxItemGroup.classList.remove(VISUALLY_HIDDEN_STYLE);
                                 const fauxEquippedItem = fauxItemGroup.querySelector("div[class*='equipped-item']");
                                 if (fauxEquippedItem) {
                                     // Transfer quality ID to the faux item slot
-                                    fauxEquippedItem.setAttribute("data-quality-id", trueItemQualityId);
+                                    fauxEquippedItem.setAttribute('data-quality-id', trueItemQualityId);
                                 }
 
-                                const swapContainer = fauxItemGroup.querySelector("div[data-item-placeholder]");
+                                const swapContainer = fauxItemGroup.querySelector('div[data-item-placeholder]');
                                 while (swapContainer.lastElementChild) {
                                     swapContainer.removeChild(swapContainer.lastElementChild);
                                 }
@@ -400,7 +399,7 @@
 
                             // Since agents cannot be "equipped" in the traditional sense, we explicitly mark them
                             // as such and prevent UI code from processing any clicks on them.
-                            agentDivs = itemList.querySelectorAll(currentAgents.map(agent => `div[data-quality-id="${agent.id}"]`).join(', '));
+                            const agentDivs = itemList.querySelectorAll(currentAgents.map(agent => `div[data-quality-id="${agent.id}"]`).join(', '));
                             agentDivs.forEach((el) => {
                                 el.firstChild.style.cursor = 'not-allowed';
                                 el.firstChild.onclick = (ev) => {
@@ -418,22 +417,22 @@
         }
     });
 
-    console.debug("[FL Assorted Cats] Registering listener for FL_AC_* messages...");
-    window.addEventListener("message", (event) => {
-        if (event.data.action === "FL_AC_settings") {
-            console.debug("[FL Assorted Cats] Received settings event: ", event.data);
+    console.debug('[FL Assorted Cats] Registering listener for FL_AC_* messages...');
+    window.addEventListener('message', (event) => {
+        if (event.data.action === 'FL_AC_settings') {
+            console.debug('[FL Assorted Cats] Received settings event: ', event.data);
             slotName = event.data.settings.slotName;
             catLabels = event.data.settings.items;
         }
-        if (event.data.action === "FL_AC_agents") {
-            console.debug("[FL Assorted Cats] Saved agents:", event.data);
+        if (event.data.action === 'FL_AC_agents') {
+            console.debug('[FL Assorted Cats] Saved agents:', event.data);
             currentAgents = event.data.agents;
         }
     });
-    console.debug("[FL Assorted Cats] Sending request to retrieve settings...")
+    console.debug('[FL Assorted Cats] Sending request to retrieve settings...')
     window.dispatchEvent(new CustomEvent('FL_AC_injected'));
 
-    console.debug("[FL Assorted Cats] Sending request to retrieve agents list...")
+    console.debug('[FL Assorted Cats] Sending request to retrieve agents list...')
     window.dispatchEvent(new CustomEvent('FL_AC_loadAgents'));
 
     testSlotObserver.observe(document, { childList: true, subtree: true });

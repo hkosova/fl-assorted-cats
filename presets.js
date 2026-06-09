@@ -34,7 +34,7 @@ const SLOT_CONTENTS_PRESETS = new Map([
         'Lyon Pursuivant of Arms Extraordinary',
         'Inquisitive Lamp-cat',
         'Feline Pariah',
-        'The Ragged Recusant'
+        'The Ragged Recusant',
     ]],
     ['Very Good Boys', [
         'Slavering Dream-Hound',
@@ -48,7 +48,7 @@ const SLOT_CONTENTS_PRESETS = new Map([
         'Surveilling Spindlewolf',
         'Brachiating Spindlewolf',
         'Seven-League Spindlewolf',
-        'Perspicacious Lurcher'
+        'Perspicacious Lurcher',
     ]],
     ['Items of Renown', [
         'Oneiric Key',
@@ -62,9 +62,8 @@ const SLOT_CONTENTS_PRESETS = new Map([
         'Unexploded Mine',
         'The Great Game',
         'Newly-Born Frost-Moth',
-        'What Might Be A Thunderbolt'
-    ]]
-    ,
+        'What Might Be A Thunderbolt',
+    ]],
     ['Whitsun', [
         'Young Terror Bird',
         'Full-Grown Terror Bird',
@@ -130,8 +129,8 @@ const SLOT_CONTENTS_PRESETS = new Map([
         'Imminent Falcon',
         'Burbling Wolfhound',
         'Exuberant Batling',
-        'Obstreperous Boar'
-    ]]
+        'Obstreperous Boar',
+    ]],
 ]);
 
 const DEFAULT_PRESET_KEY = 'Cats, Assorted';

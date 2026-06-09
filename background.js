@@ -1,4 +1,4 @@
-import { DEFAULT_PRESET_KEY, SLOT_CONTENTS_PRESETS } from "./presets.js";
+import { DEFAULT_PRESET_KEY, SLOT_CONTENTS_PRESETS } from './presets.js';
 
 chrome.runtime.onInstalled.addListener(function (details) {
     let saveInitialSettings = false;
@@ -17,7 +17,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
             settings: {
                 slotName: DEFAULT_PRESET_KEY,
                 items: SLOT_CONTENTS_PRESETS.get(DEFAULT_PRESET_KEY),
-            }
+            },
         }, () => { console.log('[FL Assorted Cats] Default settings saved into DB') });
     }
 });

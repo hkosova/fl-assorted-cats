@@ -1,4 +1,4 @@
-import {SLOT_CONTENTS_PRESETS, DEFAULT_PRESET_KEY} from "./presets.js";
+import { SLOT_CONTENTS_PRESETS, DEFAULT_PRESET_KEY } from './presets.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('slotSettingsForm');
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     presetDropdown.value = DEFAULT_PRESET_KEY;
 
-    function loadSelectedPreset() {
+    function loadSelectedPreset () {
         const presetKey = presetDropdown.options[presetDropdown.selectedIndex].text;
         form.elements.slotName.value = presetKey;
         form.elements.slotItems.value = SLOT_CONTENTS_PRESETS.get(presetKey).join('\n');
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             loadSelectedPreset();
             contentsChanged = false;
         } else {
-            if (confirm("You have not saved your changes! Do you still want to load selected preset?")) {
+            if (confirm('You have not saved your changes! Do you still want to load selected preset?')) {
                 loadSelectedPreset();
                 contentsChanged = false;
             }
@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.storage.local.set({
             settings: {
                 slotName: newSlotName,
-                items: newItems
-            }
+                items: newItems,
+            },
         }, () => {
             const statusIndicator = document.getElementById('statusIndicator');
 
@@ -74,8 +74,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const settingsEvent = new CustomEvent('FL_AC_settings', {
                     detail: {
                         slotName: newSlotName,
-                        items: newItems
-                    }
+                        items: newItems,
+                    },
                 });
                 document.dispatchEvent(settingsEvent);
             }

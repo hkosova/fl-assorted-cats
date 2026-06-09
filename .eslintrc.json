@@ -17,6 +17,7 @@
       "error",
       4
     ],
+    "comma-dangle": ["error", "always-multiline"],
     "semi": "off"
   }
 }
