@@ -1,8 +1,8 @@
 {
   "name": "FL Assorted Cats",
   "description":  "Proudly display your feline companions in \"Fallen London\"!",
-  "version": "2.9",
   "manifest_version": 2,
+  "version": "3.0",
   "permissions": ["storage"],
   "background": {
     "scripts": [
