@@ -1,3 +1,5 @@
+import {SLOT_CONTENTS_PRESETS, DEFAULT_PRESET_KEY} from "./presets.js";
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('slotSettingsForm');
     const presetDropdown = document.getElementById('presetSelect');

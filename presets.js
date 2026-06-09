@@ -134,3 +134,5 @@ const SLOT_CONTENTS_PRESETS = new Map([
 ]);
 
 const DEFAULT_PRESET_KEY = 'Cats, Assorted';
+
+export { DEFAULT_PRESET_KEY, SLOT_CONTENTS_PRESETS };

@@ -1,3 +1,5 @@
+import { DEFAULT_PRESET_KEY, SLOT_CONTENTS_PRESETS } from "./presets.js";
+
 chrome.runtime.onInstalled.addListener(function (details) {
     let saveInitialSettings = false;
 
