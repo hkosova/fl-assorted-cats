@@ -47,5 +47,15 @@
     "matches": [
       "https://*.fallenlondon.com/*"
     ]
-  }]
+  }],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "assorted.cats@bloody.daft.company",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    }
+  }
 }
