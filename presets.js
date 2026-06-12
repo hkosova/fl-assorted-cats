@@ -21,7 +21,7 @@ const SLOT_CONTENTS_PRESETS = new Map([
         'Midnight Matriarch',
         'Midnight Matriarch of the Menagerie of Roses',
         'Bengal Tigress',
-        'Extravagantly-Titled Tigress',
+        'Extravagantly Titled Tigress',
         'An Uneasy Alliance with an Exiled Tiger',
         'Tomb-Lion',
         'Parabolan Panther',
