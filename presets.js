@@ -131,6 +131,17 @@ const SLOT_CONTENTS_PRESETS = new Map([
         'Exuberant Batling',
         'Obstreperous Boar',
     ]],
+    ['Agents, Secret Agents', [
+        'Numeric Nightmare',
+        'Perforated Zubmariner',
+        'The Clay Breaker',
+        'The Luckless Captain',
+        'The Mild-Mannered Mondaine',
+        'The Nectared Proprietor',
+        'The Ragged Recusant',
+        'The Silent Partner',
+        'The Unilluminated Mole'
+    ]]
 ]);
 
 const DEFAULT_PRESET_KEY = 'Cats, Assorted';
