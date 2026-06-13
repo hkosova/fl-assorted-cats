@@ -177,7 +177,10 @@
                 return {
                     qualityName: level.name,
                     qualityId: level.id,
-                    level: level.level,
+                    level: 1,
+                    levelDescription: "There can be only one.",
+                    cap: 1,
+                    useCap: false,
                     category: level.category,
                     // I don't know how to handle it here, so let's just default
                     // to something sane-ish.
@@ -427,6 +430,18 @@
         if (event.data.action === 'FL_AC_agents') {
             console.debug('[FL Assorted Cats] Saved agents:', event.data);
             currentAgents = event.data.agents;
+
+            // Never save transformed data in the storage, lest you be
+            // bitten by any transformation bugs and will need to implement recovery
+            // code...This should fixed crash when opening "Myself" tab with any
+            // agents in the current set.
+            for (let savedAgent of currentAgents) {
+                savedAgent.level = savedAgent.level || 1;
+                savedAgent.effectiveLevel = savedAgent.effectiveLevel || 1;
+                savedAgent.levelDescription = savedAgent.levelDescription || "Adequate";
+                savedAgent.useCap = false;
+                savedAgent.cap = 1;
+            }
         }
     });
     console.debug('[FL Assorted Cats] Sending request to retrieve settings...')
