@@ -62,6 +62,27 @@
         'Crew',
         'Luggage',
     ];
+    const QUALITIY_TO_ID = new Map([
+        // Basic Abilities
+        ["Watchful", 209],
+        ["Shadowy", 210],
+        ["Dangerous", 211],
+        ["Persuasive", 212],
+        ["Respectable", 950],
+        ["Dreaded", 957],
+        ["Bizarre", 958],
+        // Advanced Skills
+        ["Kataleptic Toxicology", 140826],
+        ["Monstrous Anatomy", 140830],
+        ["A Player of Chess", 140873],
+        ["Glasswork", 140896],
+        ["Shapeling Arts", 140897],
+        ["Artisan of the Red Science", 140969],
+        ["Mithridacy", 140998],
+        ["Steward of the Discordance", 141623],
+        ["Zeefaring", 142291],
+        ["Chthonosophy", 144818],
+    ]);
     let currentAgents = [];
 
     function modifyResponse (response) {
@@ -176,7 +197,7 @@
             .map((level) => {
                 return {
                     qualityName: level.name,
-                    qualityId: level.id,
+                    qualityId: QUALITIY_TO_ID.get(level.name) || level.id,
                     level: 1,
                     levelDescription: "There can be only one.",
                     cap: 1,
@@ -433,14 +454,22 @@
 
             // Never save transformed data in the storage, lest you be
             // bitten by any transformation bugs and will need to implement recovery
-            // code...This should fixed crash when opening "Myself" tab with any
-            // agents in the current set.
-            for (let savedAgent of currentAgents) {
-                savedAgent.level = savedAgent.level || 1;
-                savedAgent.effectiveLevel = savedAgent.effectiveLevel || 1;
-                savedAgent.levelDescription = savedAgent.levelDescription || "Adequate";
-                savedAgent.useCap = false;
-                savedAgent.cap = 1;
+            // code...
+            for (const savedCompanion of currentAgents) {
+                // This should fix the crash when opening "Myself" tab with any
+                // agents in the current set.
+                savedCompanion.level = savedCompanion.level || 1;
+                savedCompanion.effectiveLevel = savedCompanion.effectiveLevel || 1;
+                savedCompanion.levelDescription = savedCompanion.levelDescription || "Adequate";
+                savedCompanion.useCap = false;
+                savedCompanion.cap = 1;
+
+                // Apparently, basic qualities (e.g. Watchful) for the player and an Agent
+                // are managed internally using different qualities! Thus, we need to explicitly convert
+                // them to prevent duplication in the "Show ... items" dropdown menu. :harold:
+                for (const enhancement of savedCompanion.enhancements) {
+                    enhancement.qualityId = QUALITIY_TO_ID.get(enhancement.qualityName) || enhancement.qualityId;
+                }
             }
         }
     });
